@@ -28,7 +28,7 @@ from optiland.sources.base import BaseSource
 
 if TYPE_CHECKING:
     from optiland.rays import RealRays
-
+import math
 
 class SMFSource(BaseSource):
     """Extended Gaussian source representing a single-mode fiber output.
