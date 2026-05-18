@@ -55,6 +55,7 @@ class SMFSource(BaseSource):
             millimeters.  Defaults to ``(0, 0, 0)``.
         is_point_source (bool): If ``True``, spatial coordinates are set to
             zero (ideal point source).  Defaults to ``False``.
+        theta0 (tuple[float,float]): Source orientation (theta_x,theta_y) in degrees. Defaults to ``(0, 0)``.
 
     Attributes:
         wavelength (float): Wavelength in µm.
@@ -81,6 +82,7 @@ class SMFSource(BaseSource):
         total_power: float = 1.0,
         position: tuple[float, float, float] = (0.0, 0.0, 0.0),
         is_point_source: bool = False,
+        theta0: tuple[float, float] = (0.0, 0.0),
     ):
         super().__init__(position=position)
 
@@ -88,6 +90,7 @@ class SMFSource(BaseSource):
         self.total_power = total_power
         self.mfd_um = mfd_um
         self.is_point_source = is_point_source
+        self.theta0 = theta0
 
         # If divergence is not provided, calculate it assuming a diffraction-limited
         # Gaussian beam: theta_half = wavelength / (pi * w0)
@@ -153,8 +156,8 @@ class SMFSource(BaseSource):
             y_start = self.sigma_spatial_mm * sqrt2 * be.erfinv(2 * u[:, 1] - 1)
 
         # --- Angular coordinates (non-paraxial) ---
-        theta_x = self.sigma_angular_rad * sqrt2 * be.erfinv(2 * u[:, 2] - 1)
-        theta_y = self.sigma_angular_rad * sqrt2 * be.erfinv(2 * u[:, 3] - 1)
+        theta_x = self.sigma_angular_rad * sqrt2 * be.erfinv(2 * u[:, 2] - 1) + self.theta0[0]
+        theta_y = self.sigma_angular_rad * sqrt2 * be.erfinv(2 * u[:, 3] - 1) + self.theta0[1]
 
         # Convert angles to direction cosines via tangent mapping
         tau_x = be.tan(theta_x)
