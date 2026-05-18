@@ -156,8 +156,8 @@ class SMFSource(BaseSource):
             y_start = self.sigma_spatial_mm * sqrt2 * be.erfinv(2 * u[:, 1] - 1)
 
         # --- Angular coordinates (non-paraxial) ---
-        theta_x = self.sigma_angular_rad * sqrt2 * be.erfinv(2 * u[:, 2] - 1) + self.theta0[0]
-        theta_y = self.sigma_angular_rad * sqrt2 * be.erfinv(2 * u[:, 3] - 1) + self.theta0[1]
+        theta_x = self.sigma_angular_rad * sqrt2 * be.erfinv(2 * u[:, 2] - 1) + math.radians(self.theta0[0])
+        theta_y = self.sigma_angular_rad * sqrt2 * be.erfinv(2 * u[:, 3] - 1) + math.radians(self.theta0[1])
 
         # Convert angles to direction cosines via tangent mapping
         tau_x = be.tan(theta_x)
